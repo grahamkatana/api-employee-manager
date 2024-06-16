@@ -8,4 +8,4 @@ npm install -D typescript
 # install packages
 npm install
 # build
-npm run build
+# npm run build
