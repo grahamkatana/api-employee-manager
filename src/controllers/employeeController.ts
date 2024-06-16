@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 const EmployeeDetail = require("../models/employeedetail")
 import { validationResult } from 'express-validator';
 import { CreateEmployeeDto } from '../dtos/CreateEmployeeDto.dto';
-
+const {logger} = require("../utils/logger")
 // Create method to create new employee
 export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, res: Response) => {
     const errors = validationResult(req);
@@ -33,6 +33,8 @@ export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, re
             message: "Employee not created",
         });
     } catch (error: any) {
+        console.log(error)
+        logger.error(error)
         return res.status(500).json({
             message: error.message,
         });
@@ -77,6 +79,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
         return res.status(200).json(employee);
 
     } catch (error: any) {
+        logger.error(error)
         return res.status(500).json({
             message: error.message,
         });
@@ -97,6 +100,7 @@ export const deleteEmployee = async (req: Request, res: Response) => {
             message: "Employee deleted successfully",
         });
     } catch (error: any) {
+        logger.error(error)
         return res.status(500).json({
             message: error.message,
         });
