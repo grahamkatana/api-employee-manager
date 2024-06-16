@@ -2,15 +2,16 @@ import { Request, Response } from 'express';
 const EmployeeDetail = require("../models/employeedetail")
 import { validationResult } from 'express-validator';
 import { CreateEmployeeDto } from '../dtos/CreateEmployeeDto.dto';
+
+// Create method to create new employee
 export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
-    console.log(errors);
     try {
         const {
-            full_name,
+            first_name,
             last_name,
             gender,
             salutation,
@@ -18,9 +19,8 @@ export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, re
             profile_color,
             employee_number,
         } = req.body;
-        console.log(req.body)
         const employee = await EmployeeDetail.create({
-            full_name,
+            first_name,
             last_name,
             gender: gender.toUpperCase(),
             salutation: salutation.toUpperCase(),
@@ -39,11 +39,67 @@ export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, re
     }
 };
 
+// Get method to get all employees
 export const indexEmployee = async (req: Request, res: Response) => {
     const data = await EmployeeDetail.findAll({})
     return res.status(200).json({
         data: data
     })
 
+}
+
+// Get method to get single employee
+export const showEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const employee = await EmployeeDetail.findByPk(id);
+    if (employee) return res.status(200).json(employee);
+    return res.status(404).json({
+        message: "Employee not found",
+    });
+}
+
+// Update method to update employee
+export const updateEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const employee = await EmployeeDetail.findByPk(id);
+    if (!employee) return res.status(404).json({
+        message: "Employee not found",
+    });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    try {
+        let data = req.body;
+        delete data.employee_number
+
+        await employee.update(data);
+        return res.status(200).json(employee);
+
+    } catch (error: any) {
+        return res.status(500).json({
+            message: error.message,
+        });
+
+    }
+
+}
+// Delete method
+export const deleteEmployee = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const employee = await EmployeeDetail.findByPk(id);
+    if (!employee) return res.status(404).json({
+        message: "Employee not found",
+    });
+    try {
+        await employee.destroy();
+        return res.status(200).json({
+            message: "Employee deleted successfully",
+        });
+    } catch (error: any) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
 }
 

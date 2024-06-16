@@ -21,4 +21,4 @@ const server = app.listen(port, () => {
 
 app.use('/api/v1', routes());
 
-export default { app, server };
+module.exports = { app, server };

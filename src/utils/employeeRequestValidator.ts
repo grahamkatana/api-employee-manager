@@ -2,10 +2,10 @@
 import { check } from "express-validator";
 
 export const employeeRequestValidator = [
-    check('full_name')
+    check('first_name')
         .not()
         .isEmpty()
-        .withMessage('Full name is required'),
+        .withMessage('First name is required'),
     check('last_name')
         .not()
         .isEmpty()

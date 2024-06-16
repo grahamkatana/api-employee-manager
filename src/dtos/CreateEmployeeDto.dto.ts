@@ -1,5 +1,5 @@
 export interface CreateEmployeeDto {
-    full_name: string;
+    first_name: string;
     last_name: string;
     gender: string;
     salutation: string;
