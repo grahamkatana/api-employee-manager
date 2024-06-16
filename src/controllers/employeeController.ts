@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 const EmployeeDetail = require("../models/employeedetail")
 import { validationResult } from 'express-validator';
-export const createEmployee = async (req: Request, res: Response) => {
+import { CreateEmployeeDto } from '../dtos/CreateEmployeeDto.dto';
+export const createEmployee = async (req: Request<{}, {}, CreateEmployeeDto>, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
