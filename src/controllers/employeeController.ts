@@ -39,8 +39,10 @@ export const createEmployee = async (req: Request, res: Response) => {
 };
 
 export const indexEmployee = async (req: Request, res: Response) => {
+    const data = await EmployeeDetail.findAll({})
     return res.status(200).json({
-        data: []
+        data: data
     })
+
 }
 
