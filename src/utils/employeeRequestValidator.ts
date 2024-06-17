@@ -14,14 +14,14 @@ export const employeeRequestValidator = [
         .not()
         .isEmpty()
         .withMessage('Gender is required')
-        .isIn(['Male', 'Female'])
+        .isIn(['Male', 'Female', 'Unspecified'])
         .withMessage('Gender must be either Male or Female or Unspecified'),
     check('salutation')
         .not()
         .isEmpty()
         .withMessage('Salutation is required')
-        .isIn(['Mr', 'Mrs', 'Ms', 'Mx'])
-        .withMessage('Salutation must be either Mr, Mrs, Ms or Mx'),
+        .isIn(['Mr', 'Mrs', 'Ms', 'Mx', 'Dr'])
+        .withMessage('Salutation must be either Mr, Mrs, Ms or Mx or Dr'),
     check('gross_salary')
         .not()
         .isEmpty()
