@@ -73,6 +73,8 @@ export const updateEmployee = async (req: Request, res: Response) => {
     }
     try {
         let data = req.body;
+        data.gender = data.gender.toUpperCase(),
+        data.salutation=data.salutation.toUpperCase(),
         delete data.employee_number
 
         await employee.update(data);
