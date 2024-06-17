@@ -78,7 +78,9 @@ const updateEmployee = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     try {
         let data = req.body;
-        delete data.employee_number;
+        data.gender = data.gender.toUpperCase(),
+            data.salutation = data.salutation.toUpperCase(),
+            delete data.employee_number;
         yield employee.update(data);
         return res.status(200).json(employee);
     }
