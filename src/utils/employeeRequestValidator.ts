@@ -14,7 +14,7 @@ export const employeeRequestValidator = [
         .not()
         .isEmpty()
         .withMessage('Gender is required')
-        .isIn(['Male', 'Female', 'Unspecified'])
+        .isIn(['Male', 'Female', 'Unspecified',"MALE", "FEMALE", "UNSPECIFIED"])
         .withMessage('Gender must be either Male or Female or Unspecified'),
     check('salutation')
         .not()

@@ -15,7 +15,7 @@ exports.employeeRequestValidator = [
         .not()
         .isEmpty()
         .withMessage('Gender is required')
-        .isIn(['Male', 'Female', 'Unspecified'])
+        .isIn(['Male', 'Female', 'Unspecified', "MALE", "FEMALE", "UNSPECIFIED"])
         .withMessage('Gender must be either Male or Female or Unspecified'),
     (0, express_validator_1.check)('salutation')
         .not()
