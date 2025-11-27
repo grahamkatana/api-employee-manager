@@ -1,0 +1,76 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: employee_manager_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db:/docker-entrypoint-initdb.d  # Optional: for custom init scripts
+    networks:
+      - app_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: employee_manager_api
+    restart: unless-stopped
+    ports:
+      - "7891:8000"
+    environment:
+      PORT: ${PORT:-8000}
+      NODE_ENV: ${NODE_ENV:-production}
+      ENV: ${ENV:-production}
+      
+      # Database connection
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: mysql  # Use service name for internal Docker networking
+      DB_PORT: 3306
+      DB_DIALECT: mysql
+      
+      # Optional: Test DB
+      TEST_DB_USERNAME: ${TEST_DB_USERNAME:-}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD:-}
+      TEST_DB_NAME: ${TEST_DB_NAME:-}
+      TEST_DB_HOST: ${TEST_DB_HOST:-}
+      TEST_DB_DIALECT: ${TEST_DB_DIALECT:-}
+      
+      # Optional: Prod DB (if different from main DB)
+      PROD_DB_USERNAME: ${PROD_DB_USERNAME:-}
+      PROD_DB_PASSWORD: ${PROD_DB_PASSWORD:-}
+      PROD_DB_NAME: ${PROD_DB_NAME:-}
+      PROD_DB_HOST: ${PROD_DB_HOST:-}
+      PROD_DB_DIALECT: ${PROD_DB_DIALECT:-}
+    volumes:
+      # Persistent storage for uploads/files
+      - app_storage:/app/storage
+      - app_uploads:/app/uploads
+      # Optional: Mount logs directory
+      - app_logs:/app/logs
+    depends_on:
+      - mysql
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  app_storage:
+    driver: local
+  app_uploads:
+    driver: local
+  app_logs:
+    driver: local
